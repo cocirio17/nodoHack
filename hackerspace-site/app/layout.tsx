@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "HackerSpace Nodo Serrano",
   description:
-    "Un espacio de Nodo Serrano para aprender, experimentar y construir en comunidad desde Tandil.",
+    "Una cada de Nodo Serrano para aprender, experimentar y construir en comunidad desde Tandil.",
   icons: { icon: "/favicon.svg" },
 };
 
