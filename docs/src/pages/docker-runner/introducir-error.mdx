@@ -1,0 +1,40 @@
+---
+title: "Publicar un error de tipos controlado"
+description: "Enviar una versión incompatible a development y anotar su SHA."
+showAskAi: false
+showFeedback: false
+---
+
+# Publicar un error de tipos controlado
+
+Cuando el baseline haya pasado y el primer runner haya terminado, volvé al editor y a Bash del host en `lab`, en la rama `development`. Ahora vamos a introducir una falla conocida para aprender a reconocerla en los logs.
+
+En `app/estado.ts`, cambiá deliberadamente:
+
+```typescript
+export const plazas: number = 20;
+```
+
+por:
+
+```typescript
+export const plazas: number = "20";
+```
+
+`number` declara que `plazas` debe contener un número. Las comillas convierten `"20"` en texto, de tipo `string`. Aunque se vea parecido en pantalla, TypeScript lo considera una asignación incompatible. Esa es la falla que queremos reconocer en el check.
+
+Guardá el archivo. Revisá que el diff contenga sólo el cambio previsto y publicalo con los comandos del ejercicio:
+
+```bash
+git diff
+git add app/estado.ts
+git commit -m "Introduce un error de tipos para la practica"
+git push origin development
+git rev-parse HEAD
+```
+
+Anotá el nuevo SHA como versión con error y comprobalo en `development` de GitHub. Nos va a permitir distinguir esta prueba del baseline. El workflow es manual, así que **el push por sí solo no lo ejecuta**. Todavía falta una instancia efímera nueva y un dispatch.
+
+También podés editar el archivo con el editor web de GitHub y confirmar en `development`, en lugar de duplicar la edición local. Si elegís esa vía, en el host ejecutá `git pull --ff-only` estando en `development` y anotá el SHA con `git rev-parse HEAD` antes de continuar.
+
+**No sigas si** el push falló, el cambio quedó en otra rama o el diff incluye trabajo ajeno a esta prueba.

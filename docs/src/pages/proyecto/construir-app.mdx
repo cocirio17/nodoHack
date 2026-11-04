@@ -1,0 +1,29 @@
+---
+title: "Construir la app"
+description: "Comprobá el build antes de abrir el servidor de desarrollo."
+showAskAi: false
+showFeedback: false
+---
+
+# Construir la app
+
+Con la instalación terminada sin errores, sigamos en la terminal del host, dentro de `lab` y en `main`. Ahora vamos a construir la app antes de abrirla.
+
+El build transforma el código fuente en archivos preparados para producción y puede detectar errores que impidan compilar. No deja un servidor abierto ni demuestra que todos los enlaces y comportamientos funcionen. Eso lo vamos a comprobar al usar la app.
+
+```bash
+pnpm build
+```
+
+Esperá a que el comando termine sin errores. Podés encontrar mensajes como `Compiled successfully` y `Generating static pages`, pero no te quedes sólo con uno de ellos. Lo que necesitamos es que tu comando termine correctamente.
+
+El build genera `.next/`, no publica un deployment. Miremos ahora cómo trató Git esos archivos y las dependencias:
+
+```bash
+git status --ignored
+git ls-files node_modules .next
+```
+
+Si `git ls-files` no devuelve nada, esas carpetas no están versionadas. Fijate además que `git status --ignored` las muestre como ignoradas y no preparadas para commit. Son las reglas de `.gitignore` las que evitan que `git add .` las prepare, no el hecho de que todavía no estén versionadas.
+
+**No sigas si** falla el build: leé el primer error. Si hay artefactos versionados en un repo previo, usá sólo la [reparación opcional](/opcional/reparar-artefactos); no quites todo el proyecto del índice.

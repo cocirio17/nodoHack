@@ -1,0 +1,36 @@
+---
+title: "5. El webhook"
+showAskAi: false
+showFeedback: false
+description: "Recibí un evento firmado de GitHub sin llamar todavía al modelo."
+---
+
+import sequence from '../../../assets/course-e5-sequence.png'
+
+# 5. El webhook
+
+Hasta ahora consultamos health enviando un GET. Vamos a invertir esa iniciativa para que GitHub nos avise cuando ocurre algo. Con polling, un cliente pregunta periódicamente si hay novedades, aunque nada haya cambiado. Con un webhook, GitHub envía una solicitud HTTP POST cuando ocurre un evento seleccionado. Ese POST lleva los datos del aviso al receptor. El túnel sólo transporta la request y el receptor la valida y responde.
+
+Para seguir, comprobá que [el túnel hacia Next funciona](/tunel/recuperar-origen) y que tenés tu repositorio privado y el perfil del agente conservado. Vamos a usar el navegador de GitHub, el host en la carpeta `lab` y los containers existentes `lab-agent` y `lab-app`.
+
+En este capítulo vamos a recibir en `POST /api/github`, implementado en `app/api/github/route.ts`. No se llama a Hermes ni se ejecuta código del PR. Buscamos reconocer una entrega real `pull_request`, encontrarla también en los logs y repetirla para observar si el proceso recuerda su ID. Al terminar dejaremos inactivo sólo este hook antes de cambiar de receptor.
+
+<img src={sequence} alt="GitHub envía un evento por el túnel al receptor y recibe una respuesta HTTP" />
+
+El diagrama del taller es conceptual. La respuesta HTTP confirma la recepción del aviso, no una revisión de código.
+
+| Parte del aviso | Qué identifica |
+| --- | --- |
+| POST + /api/github | Método y ruta del receptor |
+| X-GitHub-Event | Tipo de evento, por ejemplo pull_request |
+| X-GitHub-Delivery | ID de la entrega, también llamado GUID |
+| X-Hub-Signature-256 | HMAC-SHA256 del body con el secret |
+| Body JSON | Repositorio, acción y datos del PR |
+
+Los encabezados, o headers, describen la solicitud; el body lleva sus datos en JSON. El evento indica qué tipo de cambio ocurrió, por ejemplo `pull_request`. La propiedad `action` del JSON precisa qué pasó dentro de ese tipo, como `opened` al abrir un PR o `synchronize` al actualizarlo con commits.
+
+El secret compartido no va en la URL ni en código cliente. HTTPS cifra el transporte, pero no reemplaza la firma ni los filtros que vamos a configurar. **El túnel expone el servicio completo de destino.**
+
+Empezá por [autenticar GitHub dentro del agente](/webhook/autenticar-agente). La sesión del host no se comparte con el container.
+
+Referencia: [crear webhooks en GitHub](https://docs.github.com/en/webhooks/using-webhooks/creating-webhooks).

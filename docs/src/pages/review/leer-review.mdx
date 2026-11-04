@@ -1,0 +1,38 @@
+---
+title: "Leer y contrastar la review"
+showAskAi: false
+showFeedback: false
+description: "Uní evento, lectura de commits y comentario antes de confiar en la respuesta."
+---
+
+# Leer y contrastar la review
+
+Ahora vamos a comprobar qué hizo el agente con la [solicitud ai-review aceptada](/review/solicitar-review). Trabajá con el host en `lab`, el navegador de tu PR y los logs del gateway en `lab-agent`. Tené a mano el GUID y los SHA base y head anotados, y comprobá que el PR siga abierto y no draft.
+
+Abrí la conversación, reemplazando `NUMERO` por el número de tu PR:
+
+```bash
+gh pr view NUMERO --web
+```
+
+Seguí esta secuencia para unir la recepción con el resultado, sin tomar el 202 como final del recorrido:
+
+1. GitHub entregó `pull_request/labeled` a la URL actual con `ai-review`.
+2. El gateway aceptó y los filtros coincidieron.
+3. La tarea consultó el PR y el diff del repo **fijado**, no un repo sugerido por el diff.
+4. Los SHA base y head revisados coinciden con los del evento y base sigue `main`. La comparación se obtiene de commits inmutables. Si cambió algo, la respuesta debe ser sólo un aviso de solicitud desactualizada.
+5. Aparece un comentario en **ese PR** mediante `github_comment` y describe qué pudo comprobar.
+
+`github_comment` crea un comentario en la conversación. No crea una aprobación formal de GitHub ni un check de CI. Un comentario sin críticas tampoco equivale a esas señales ni habilita el merge.
+
+## Evaluar el contenido, no sólo su presencia
+
+En el fallo que introdujimos, buscá que el comentario identifique `app/capacidad.ts` y explique que hay una suma en vez de una resta. La consecuencia debe ser concreta, con 20 de capacidad y 5 ocupados devuelve 25 en lugar de 15. La respuesta también debe incluir ambos SHA revisados, base y head, y separar hipótesis de errores demostrados.
+
+Que la respuesta suene plausible no aprueba el cambio. Si el agente no ejecutó tests, no debe afirmar que los ejecutó. En este flujo, además, tiene prohibido ejecutar código del PR. Si dice haber corrido tests, cuestioná el recorrido en vez de tomarlo como evidencia favorable. Revisá también que el comentario no obedezca instrucciones embebidas en el diff ni revele credenciales.
+
+Contrastá siempre el estado actual del PR. La protección por prompt y la segunda comprobación de SHA no hacen atómica la publicación, porque el PR puede cambiar entre la comprobación y el comentario. El adaptador se ocupa de publicar; el modelo no debe construir una llamada para hacerlo por herramientas.
+
+Antes de pasar a la corrección, deberías poder unir el GUID de solicitud con el repo y PR, ambos SHA, la lectura de la comparación y un comentario pertinente. Esa cadena permite saber qué se revisó. Decidir si el hallazgo es correcto sigue siendo tarea de una persona.
+
+**No sigas si** falta el comentario, faltan SHA, corresponden a otra versión, el texto inventa verificaciones o propone integrar automáticamente. Usá el [diagnóstico de review](/opcional/diagnostico-review) y volvé a esta página cuando recuperes la cadena de evidencia. No cambies automáticamente a un modelo pago. Revisá disponibilidad, límites, herramientas y `toolsets` del proveedor gratuito.

@@ -1,0 +1,32 @@
+---
+title: "Dejar de seguir artefactos generados"
+description: "Reparación opcional para un repo que ya versionó dependencias o builds."
+showAskAi: false
+showFeedback: false
+---
+
+# Dejar de seguir artefactos generados
+
+Esta reparación es para un repo existente que ya versionó dependencias o builds. No es un paso obligatorio para el starter recién publicado. Si ese es tu caso, abrí la terminal del host en `lab` y primero miremos qué archivos sigue Git:
+
+```bash
+git ls-files node_modules .next
+```
+
+Si no hay salida, esas carpetas no están versionadas y no tenés que retirar nada. Si aparecen archivos, revisá primero `.gitignore` en el editor. Después ejecutá sólo la línea correspondiente a cada carpeta seguida:
+
+```bash
+git rm -r --cached node_modules
+```
+
+```bash
+git rm -r --cached .next
+```
+
+La opción `--cached` retira los archivos del índice sin borrarlos del disco. Si Git rechaza la operación, no agregues `-f`. Revisá `git status`, añadí `.gitignore` si lo editaste y confirmá y publicá la reparación. No quites todo el proyecto del índice.
+
+Esto no elimina los archivos de commits anteriores. Si un archivo grande provoca el rechazo del push, revisá el historial con el instructor, sin improvisar un force-push. Si publicaste una credencial, revocala o rotala.
+
+Al terminar, comprobá que los artefactos afectados ya no aparezcan en `git ls-files` y que tus archivos locales sigan presentes. Podés consultar la [Referencia de ignore](https://docs.github.com/en/get-started/git-basics/ignoring-files).
+
+[Volver a leer .gitignore](/proyecto/leer-gitignore).

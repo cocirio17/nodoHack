@@ -1,0 +1,59 @@
+---
+title: "Diagnosticar una review por última evidencia"
+showAskAi: false
+showFeedback: false
+description: "Revisá la capa donde se cortó el recorrido sin ampliar permisos ni contratar otro modelo."
+---
+
+# Diagnosticar una review por última evidencia
+
+Esta página es opcional y te ayuda a encontrar dónde se interrumpió la review. Después podés volver a [leer y contrastar la review](/review/leer-review).
+
+Tené a mano el navegador del PR y Recent Deliveries del hook nativo, la terminal del gateway en `lab-agent`, dentro de `/workspace`, y el host en `lab` para consultar health. Antes de revisar, identificá el repo y PR, el hostname actual, los SHA solicitados y el GUID si existe. **No imprimas el perfil, secrets, PAT, body completo ni headers sensibles.**
+
+Empezá por la **última evidencia que realmente tenés**, no por la etapa a la que esperabas llegar. La tabla indica qué comprobar a continuación:
+
+| Última evidencia | Siguiente comprobación |
+| --- | --- |
+| No hay entrega | Hook activo de esta review, hostname actual, evento Pull requests seleccionado y transición nueva de etiqueta ai-review que produzca labeled |
+| Error de red o firma | Túnel, gateway, path /webhooks/github-pr-review, TLS verificado y secret del gateway coincidente en ambos lados |
+| Evento ignorado | Repo, head repo, base main, estado Open, no draft, acción labeled y etiqueta exacta ai-review |
+| Accepted, sin lectura del PR | Modelo con herramientas, toolsets y sesión gh en lab-agent |
+| No lee el diff | Repo fijo, acceso Contents Read y consulta inmutable de base SHA...head SHA; no sustituir por checkout |
+| Respuesta generada, sin comentario | Acceso Pull requests Write y configuración deliver: github_comment con repo y PR fijados |
+| Solicitud desactualizada | Base o head cambió; contrastar estado actual y solicitar un labeled nuevo, no revisar silenciosamente otro diff |
+
+## Separar salud local, túnel y autenticación
+
+Primero vamos a separar la respuesta local de la conexión pública. Desde el **host**, en `lab`, consultá ambos health:
+
+```bash
+curl -i http://127.0.0.1:8644/health
+curl -i https://TU_URL_PUBLICA/health
+```
+
+Usá tu hostname real. Si el health local responde 200 y el público falla, el problema está después del listener. Si ambos responden 200, comprobaste esas conexiones, pero no HMAC, filtros, disponibilidad del modelo ni comentario. No uses `localhost` desde otro container como si fuera el host. Antes de repetir una conexión o recrear nada, revisá si [lab-agent ya pertenece a red-taller](/review/conectar-agente).
+
+Si el problema aparece al usar herramientas, comprobá la sesión entrando desde el host al container existente:
+
+```bash
+docker exec -it lab-agent bash
+cd /workspace
+gh auth status
+```
+
+No uses opciones que muestran tokens. Confirmá la cuenta y el origen de la credencial. Las variables `GH_TOKEN` y `GITHUB_TOKEN` pueden prevalecer, pero no las imprimas ni las borres a ciegas. Si falta un permiso, volvé al [PAT mínimo del agente](/webhook/autenticar-agente). No agregues Administration, Issues ni permisos de organización por reflejo.
+
+Si el evento fue ignorado, compará Request con [los filtros nativos](/review/configurar-ruta). No muevas la selección al prompt, porque eso permitiría que todos los eventos gasten tokens. Si estás comprobando el caso negativo, recordá que la ausencia de comentario no demuestra ausencia de llamada. Para sostener esa conclusión, correlacioná hora, GUID, logs y uso del proveedor.
+
+## Modelo y comentario son etapas distintas
+
+Si la tarea fue aceptada pero no avanza, revisá disponibilidad, límites y soporte de herramientas del proveedor. La disponibilidad gratuita no está garantizada. **No cambies automáticamente a un modelo pago ni habilites facturación.** Si falla una consulta, el resultado debe ser un error explícito, no una revisión inventada.
+
+Si ya hay una respuesta pero falta el comentario, recordá que `github_comment` publica al destino fijado. No le pidas al modelo que improvise la publicación por API, no exportes su PAT y no copies credenciales al runner. Conservá el repo, los SHA base y head y las guardas contra solicitudes desactualizadas. Esas instrucciones no hacen atómica la entrega ni sustituyen el aislamiento.
+
+Para retomar el recorrido, deberías poder señalar la capa del fallo y una evidencia nueva y concreta de recuperación, sin haber debilitado los controles. **No sigas si** para avanzar tendrías que desactivar firma o filtros, ejecutar código del PR en el agente, revelar credenciales o contratar otro servicio. Conservá el error no sensible para trabajarlo con el instructor.
+
+Volvé a [leer y contrastar la review](/review/leer-review). Si cambió un SHA, solicitá después [una review nueva del commit actual](/review/solicitar-nueva-review).
+
+Referencias: [webhooks nativos de Hermes](https://hermes-agent.nousresearch.com/docs/user-guide/messaging/webhooks), [modelos gratuitos en OpenRouter](https://openrouter.ai/docs/guides/routing/model-variants/free).

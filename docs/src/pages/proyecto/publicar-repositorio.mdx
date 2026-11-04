@@ -1,0 +1,25 @@
+---
+title: "Publicar main en GitHub"
+description: "Enviá la misma carpeta al repositorio vacío."
+showAskAi: false
+showFeedback: false
+---
+
+# Publicar main en GitHub
+
+Ahora sí vamos a enviar el primer commit a GitHub. Seguí en la terminal del host, en `lab` y en la rama `main`. Antes de enviarlo, el commit tiene que estar revisado y creado, la autenticación HTTPS debe ser correcta y el repo remoto debe seguir vacío.
+
+Para conectar ambos repositorios usamos un remote, una dirección guardada para comunicarnos con otro repositorio. Le vamos a poner el nombre local `origin` a tu repo de GitHub. La primera línea guarda su dirección y `git push` envía los commits de `main`. Con `-u` vinculamos esta rama local con `origin/main` para los próximos envíos y sincronizaciones.
+
+Reemplazá `TU_USUARIO/REPO` por el propietario y nombre reales:
+
+```bash
+git remote add origin https://github.com/TU_USUARIO/REPO.git
+git push -u origin main
+```
+
+Esperá a que el push termine sin error. Después abrí tu repo en GitHub y buscá la rama `main` y el mensaje del primer commit. En la raíz deben estar `app/`, `package.json`, `Dockerfile` y `.gitignore`. Esa comparación confirma que enviaste la app que venís preparando.
+
+**No sigas si** Git rechaza el push o el árbol remoto no es tu app. No uses force-push para tapar una historia distinta.
+
+No hace falta volver a clonar. Vamos a seguir trabajando en esta misma carpeta `lab`. Abrila en el editor para leer los archivos que acabás de publicar.

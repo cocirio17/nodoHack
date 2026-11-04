@@ -1,0 +1,41 @@
+---
+title: "Ejecutar y comprobar la falla"
+description: "Disparar el segundo run y localizar el error TS2322 esperado."
+showAskAi: false
+showFeedback: false
+---
+
+# Ejecutar y comprobar la falla
+
+Dejá el segundo runner escuchando y usá el navegador o una terminal del host en `lab`, en la rama `development`. Ya tenés publicado y anotado el SHA del error. Ahora vamos a comprobar si el check reconoce esa falla.
+
+**Elegí un solo dispatch.** En la web, abrí **Actions → Checks del workshop → Run workflow → development → Run workflow**. Como alternativa, ejecutá lo siguiente desde el host si ya tenés Actions: Read and write:
+
+```bash
+gh workflow run checks.yml --ref development
+gh run list --workflow checks.yml --limit 5
+```
+
+Anotá el nuevo `RUN_ID`. Comprobá en el navegador que corresponde a `development` y al SHA del error, no al baseline. Consultá un estado puntual y abrí los steps:
+
+```bash
+gh run view RUN_ID --json status,conclusion
+gh run view RUN_ID --web
+```
+
+Si está en cola, comprobá la escucha y las etiquetas `self-hosted`, `linux`, `workshop` antes de cambiar código. Cuando termine, buscá el step `pnpm typecheck` y leé el archivo y la línea que señala. Así vas a distinguir el error buscado de una falla de infraestructura. También podés leer los logs fallidos desde el host:
+
+```bash
+gh run view RUN_ID --log-failed
+```
+
+Mensaje esperado, presentado como ejemplo:
+
+```text
+app/estado.ts(1,14): error TS2322:
+Type 'string' is not assignable to type 'number'.
+```
+
+Para dar por hecha esta prueba, necesitás ver `completed` con `failure` en el SHA del error y la falla de tipos por asignar string a number. Un fallo de descarga o de runner no demuestra lo mismo. Esperá también a que el segundo runner salga después de su único job.
+
+No uses `gh run watch`. **No sigas si** el run está en otro SHA o falló por otra causa: leé el primer step fallido antes de corregir la prueba.

@@ -1,0 +1,38 @@
+---
+title: "Comprobar Production después del merge"
+description: "Cerrá el capítulo con la nueva versión publicada y evidencia identificable."
+showAskAi: false
+showFeedback: false
+---
+
+import branches from '../../../assets/course-commit-branch.png'
+
+# Comprobar Production después del merge
+
+El PR ya quedó integrado con un merge commit y conservaste `development`. Nos falta comprobar qué pasó con Production. Abrí el PR de GitHub y el mismo proyecto Vercel en el navegador.
+
+<img src={branches} alt="main avanza al merge mientras development conserva su referencia" />
+
+El diagrama del taller es conceptual. Fijate que `main` avanza al merge mientras `development` conserva su referencia. Una branch es una referencia, no una copia independiente de todos los archivos.
+
+Esperá el nuevo deployment de **Production** desde `main`. Comprobá **Ready**, la rama, el commit y la URL. Después abrí la landing y buscá tu título nuevo, por ejemplo "Aprender y construir en comunidad".
+
+Compará el SHA con el commit que quedó en `main`. El merge puede tener un SHA distinto de la cabeza del PR, así que no compares Production contra el antiguo SHA de `development` como si fueran iguales.
+
+Para cerrar el capítulo, comprobá que podés identificar estos resultados:
+
+- Tu repo propio con `main` y `development`, archivos confirmados y enviados.
+- El PR integrado y su commit de merge.
+- La URL de Production y el deployment que muestra el título nuevo.
+- La URL única del Preview que probaste y su SHA.
+- El build local de Next.js que terminó sin errores.
+
+**No sigas si** Production muestra otro commit o contenido. [Diagnóstico de Vercel](/opcional/diagnostico-vercel) orienta por repo no visible, framework no detectado, build fallido o cambio ausente; [reparación de artefactos](/opcional/reparar-artefactos) sólo aplica si ya estaban versionados.
+
+### Trasladarlo a tu proyecto
+
+Cuando uses este recorrido en otro proyecto, vas a conservar el repo, las branches, los commits, el PR, la integración Git con Vercel y la comparación Preview/Production. Lo que vas a adaptar es el framework, el directorio raíz, el gestor, el lockfile, el comando de build y las variables que realmente necesita esa app. No cambies el recorrido de Git para compensar un ajuste del framework.
+
+La [demo opcional de Codespaces](/opcional/codespaces) puede hacerse ahora, sólo para esta landing. Después volvés al host; no reemplaza el taller completo.
+
+El siguiente capítulo, [Docker y runner](/docker-runner), usa esta misma app y `Dockerfile` para ejecutar un check propio. No confundas ese workflow con el estado de Vercel que ya comprobaste.

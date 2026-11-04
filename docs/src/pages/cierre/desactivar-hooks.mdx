@@ -1,0 +1,18 @@
+---
+title: "Desactivar los hooks de práctica"
+description: "Detener nuevas entregas antes de apagar sus receptores."
+showAskAi: false
+showFeedback: false
+---
+
+# Desactivar los hooks de práctica
+
+Vamos a impedir nuevas entregas antes de apagar los receptores. Este paso sirve aunque haya quedado un ejercicio incompleto, siempre que hayas decidido detener la práctica y ya no necesites nuevas reviews. En GitHub, abrí tu repo y entrá en **Settings → Webhooks**.
+
+Identificá los hooks del taller por sus rutas `/api/github` y `/webhooks/github-pr-review`. Abrí cada uno que hayas creado, desmarcá **Active** y guardá, conservando su historial de entregas. Si no llegaste a crear alguno, no hay nada que desactivar en ese caso.
+
+Con esto GitHub deja de enviar nuevas entregas. El túnel y el gateway siguen funcionando, las tareas que ya empezaron no se cancelan y el secret del hook permanece en su configuración. Por eso el cierre continúa en las páginas siguientes.
+
+Si preferís delegarlo, todavía podés pedirle a Hermes que desactive **sólo los hooks que creó para esta práctica**, mientras conserve la sesión necesaria. No modifiques hooks ajenos.
+
+Comprobá que todos los hooks que creaste para la práctica estén inactivos. Si querés delegar otra parte del cierre al agente, hacelo antes de revocar su credencial. Si no podés acceder a GitHub, seguí igualmente con la parada de los procesos locales y retomá la desactivación cuando recuperes acceso. **No dejes el túnel abierto mientras tanto.**

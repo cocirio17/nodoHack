@@ -1,0 +1,42 @@
+---
+title: "Comparar Preview y Production"
+description: "Reconocé las dos versiones en el mismo proyecto Vercel."
+showAskAi: false
+showFeedback: false
+---
+
+import two from '../../../assets/course-dos-deployments.png'
+import filters from '../../../assets/vercel-check-deployment-filters.png'
+import protection from '../../../assets/vercel-setup-preview-protection.png'
+
+# Comparar Preview y Production
+
+El push a `development` terminó bien y ya identificaste su SHA. Abrí el mismo proyecto Vercel en el navegador para buscar esa versión y compararla con Production.
+
+Preview viene habilitado por defecto después del primer deployment. Un push a una rama no productiva genera Preview sin otro proyecto, workflow de Actions ni compra adicional.
+
+Esta versión nos permite probar el cambio antes de llevarlo a Production. No mueve la rama `main` ni reemplaza por sí sola la URL principal. Tampoco significa "privado", así que comprobá la protección de acceso antes de compartir su URL o incluir información sensible.
+
+<img src={two} alt="main publica Production y development publica Preview dentro del mismo proyecto" />
+
+Diagrama del taller; ejemplo conceptual.
+
+En **Deployments**, filtrá rama `development` y entorno **Preview**. Verificá **Ready**, rama y SHA del commit que enviaste. Abrí la URL única de ese deployment.
+
+<img src={filters} alt="Filtros de rama y entorno en Deployments de Vercel" />
+
+Referencia oficial de Vercel.
+
+Dejá ambas URLs abiertas. En Preview buscá tu título nuevo, por ejemplo "Aprender y construir en comunidad". En Production todavía debe decir "HackerSpace Nodo Serrano", hasta que integremos el cambio. Compará también la branch y el SHA para saber qué versión estás mirando en cada una.
+
+Que Preview esté creado no significa que se pueda abrir sin login. Si hay protección, usá tu sesión autorizada. No desactives la seguridad para simular que funciona.
+
+<img src={protection} alt="Opciones de Deployment Protection que pueden requerir sesión autorizada" />
+
+Referencia oficial de Vercel.
+
+Si no encontrás Preview, revisá el repo, los permisos de la GitHub App y **Production → Branch Tracking = main**. Preview debe incluir las ramas no asignadas. Recordá que Vercel Development no equivale a nuestra rama `development`.
+
+Si el proyecto ya tenía configuración, fijate si `git.deploymentEnabled` excluye la rama o si **Build and Deployment → Ignored Build Step** cancela builds o construye sólo Production. No agregues estas opciones al camino básico. Podés consultar la [Configuración Git](https://vercel.com/docs/project-configuration/git-configuration).
+
+**No sigas si** entorno, SHA o contenido no coincide. [Diagnóstico opcional](/opcional/diagnostico-vercel).

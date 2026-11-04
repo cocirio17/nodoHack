@@ -1,0 +1,29 @@
+---
+title: "Preparar el equipo"
+description: "Comprobar acceso al material y herramientas del host antes del primer clon."
+showAskAi: false
+showFeedback: false
+---
+
+# Preparar el equipo
+
+Antes de clonar el material, vamos a preparar lo necesario en tu equipo o en WSL2.
+
+Necesitás una cuenta de GitHub con acceso de lectura al repo privado del taller, [Git](https://git-scm.com/install/), [GitHub CLI](https://cli.github.com/) y un editor. Git nos va a servir para registrar versiones del proyecto. GitHub aloja el repositorio remoto y las herramientas para colaborar, y GitHub CLI nos permite usar esas funciones desde la terminal con el comando `gh`.
+
+Primero comprobá el acceso al material con tu cuenta o credencial existente. Más adelante vamos a crear un token de acceso personal, o PAT, para tu propio sitio. Ese token no va a permitirte leer el repo privado del taller.
+
+Los comandos están escritos para Bash, la shell que los interpreta. Podés usarla en Linux, macOS o [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install), que permite trabajar con un entorno Linux dentro de Windows. Si estás en Windows con Docker Desktop, trabajá dentro de WSL2. No pegues estos comandos en PowerShell.
+
+Abrí la terminal y comprobá que las dos herramientas del primer paso estén disponibles:
+
+```bash
+git --version
+gh --version
+```
+
+Más adelante vamos a necesitar Node 22 y pnpm 10.20.0, pero recién después del primer push. Docker aparece en el capítulo 2. Las cuentas del modelo y Telegram también las vamos a configurar cuando hagan falta. No prepares tokens ni habilites pagos por anticipado.
+
+El sitio Vocs que estás leyendo es el material del taller, no la aplicación con la que vas a practicar. Si encontrás comandos para mantener esta guía, van en `docs/` del material. **No los ejecutes en `lab` ni como parte de la app.**
+
+Para seguir, ambos comandos tienen que mostrar sus versiones y tu cuenta tiene que poder abrir el repo privado del material. Si todavía falta acceso, resolvámoslo antes de clonar.

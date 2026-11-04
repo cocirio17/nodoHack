@@ -1,0 +1,18 @@
+---
+title: "Construir la aplicación de origen"
+description: "Terminar el build antes de iniciar el servidor de producción."
+showAskAi: false
+showFeedback: false
+---
+
+# Construir la aplicación de origen
+
+Con la instalación terminada correctamente, quedate en la shell de `lab-app`, en `/workspace` y con `development` montada. Vamos a construir los archivos actuales para usar el servidor de producción de Next:
+
+```bash
+pnpm build
+```
+
+En este recorrido no usamos `pnpm dev`. El servidor de producción necesita que este build termine antes de arrancar.
+
+Cuando vuelva la shell, fijate que el build haya finalizado sin error. **No sigas si** falló la compilación o la generación de rutas. No ejecutes `start` contra un build incompleto o desactualizado.

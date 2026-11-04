@@ -1,0 +1,30 @@
+---
+title: "Confirmar el cambio de portada"
+description: "Creá una versión local del título revisado."
+showAskAi: false
+showFeedback: false
+---
+
+import savePush from '../../../assets/course-repo-entorno.png'
+
+# Confirmar el cambio de portada
+
+Ya guardaste el título y revisaste el diff. Volvé a la terminal del host, en `lab` y en la rama `development`, para crear su versión en Git.
+
+Antes de hacerlo, distingamos las tres operaciones que estamos usando:
+
+<img src={savePush} alt="Archivo guardado, commit local y push al repositorio remoto" />
+
+El diagrama del taller es conceptual. Guardar cambia el archivo, commit crea una versión y push la envía a GitHub. Ahora vamos a mirar el diff una vez más, preparar sólo `app/page.tsx` y confirmar ese cambio:
+
+```bash
+git diff
+git add app/page.tsx
+git commit -m "Actualiza la portada del HackerSpace"
+```
+
+Si Git pide identidad, consultá `git config user.name` y `git config user.email`. Configurá sólo este repo con tus datos reales como en [iniciar Git](/proyecto/iniciar-git), y repetí el commit.
+
+Después del commit, consultá `git log -1 --oneline` y comprobá su mensaje. Esa versión ya está guardada localmente, pero todavía no se envió a GitHub.
+
+**No sigas si** el commit falla o incluye cambios ajenos al título.

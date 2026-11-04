@@ -1,0 +1,20 @@
+**/node_modules/
+**/.pnpm-store/
+**/.next/
+**/.vercel/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.DS_Store
+*.tsbuildinfo
+# Track workshop deck; keep local authoring files and PDF export out.
+/slides/*
+!/slides/workshop.pptx
+/docs/consulta.pdf
+# Vocs course build, generated routes and local caches.
+/docs/dist/
+/docs/.vocs/
+/docs/.waku/
+/docs/src/pages.gen.ts

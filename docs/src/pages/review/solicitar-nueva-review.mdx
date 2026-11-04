@@ -1,0 +1,33 @@
+---
+title: "Solicitar review del SHA corregido"
+showAskAi: false
+showFeedback: false
+description: "Producí un labeled nuevo y contrastá ambos SHA con la respuesta nueva."
+---
+
+# Solicitar review del SHA corregido
+
+Con la [corrección publicada](/review/publicar-correccion) y su SHA nuevo anotado, vamos a pedir otra review. Usá **Labels** de tu PR en el navegador y Recent Deliveries del hook nativo. Para consultar el estado, trabajá desde el host en `lab`. El PR debe seguir Open, no draft, `development → main` y dentro del mismo repo.
+
+Después del push, quitá **ai-review** y volvé a agregarla desde el selector web. Si estaba ausente, agregala. Necesitamos una transición nueva a presente que produzca `labeled`, porque el evento debe llevar los SHA actuales. **No repitas una entrega antigua** para pedir review de commits nuevos.
+
+Seguí la nueva entrega hasta el comentario:
+
+1. GUID nuevo, etiqueta `ai-review` y PR correcto en Recent Deliveries.
+2. SHA head recibido igual al commit corregido. Anotá también el base recibido.
+3. Filtros coincidentes y tarea aceptada en el gateway. 202 aún no significa comentario.
+4. Comentario nuevo en el PR, con **ambos SHA** revisados. Su head debe ser el SHA corregido, no el de la suma.
+
+Desde el host, podés contrastar esos datos con el estado actual:
+
+```bash
+git rev-parse HEAD
+gh pr view NUMERO --json baseRefName,baseRefOid,headRefOid
+gh pr view NUMERO --web
+```
+
+Leé la respuesta nueva con [los mismos criterios críticos](/review/leer-review). Debe analizar la versión corregida, no presentar como hallazgo actual una suma que ya no está. Si recibís un aviso de solicitud desactualizada, no lo cuentes como revisión. Significa que cambió base o head y habrá que solicitar otra vez sobre el estado actual.
+
+Antes de avanzar, comprobá que el GUID nuevo y el comentario nuevo correspondan a los SHA base y head solicitados, y que head sea el SHA corregido. Recordá que los controles por instrucciones siguen sin hacer atómica la publicación.
+
+**No sigas si** el comentario corresponde al SHA viejo, sólo tenés 202 o el estado cambió durante el trabajo. Reconciliá la evidencia y pedí un evento fresco cuando el PR esté estable. La ausencia de críticas del modelo no es motivo suficiente para avanzar al merge.

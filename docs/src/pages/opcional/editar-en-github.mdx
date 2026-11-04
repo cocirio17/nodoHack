@@ -1,0 +1,20 @@
+---
+title: "Hacer el cambio desde GitHub"
+description: "Alternativa al editor local para publicar el cambio visible en development."
+showAskAi: false
+showFeedback: false
+---
+
+# Hacer el cambio desde GitHub
+
+Podés hacer el cambio de título desde GitHub en lugar de usar el editor local. Elegí esta alternativa antes de editar localmente, con Production desde `main` ya funcionando. Abrí tu repo propio en GitHub y no mezcles ambos métodos con cambios pendientes.
+
+En el selector de branches, creá `development` desde `main` o seleccioná esa rama si ya existe. Abrí `app/page.tsx`, pulsá el lápiz y cambiá el título visible por una frase que reconozcas. Confirmá el cambio en **development**, no en main.
+
+Conservá esa rama para los siguientes ejercicios. No necesitás otro repo ni otro proyecto Vercel. El push web dispara Preview mediante la integración existente.
+
+Después de confirmar, fijate que el archivo y el commit nuevos estén en `development`. En `main` debe seguir el título anterior hasta el merge. **Si sólo modificaste main, detenete antes de comparar entornos.**
+
+Cuando el curso vuelva a los comandos locales, necesitaremos sincronizar esos cambios con tu equipo. Conservá el árbol limpio y ejecutá la [sincronización de ambas ramas](/docker-runner/sincronizar-ramas) cuando llegues a ese paso.
+
+[Volver al recorrido en comparar Preview](/proyecto/comparar-preview).
